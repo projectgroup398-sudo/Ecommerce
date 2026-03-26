@@ -1,0 +1,223 @@
+{% extends 'index.html' %}
+{% block content %}
+<style>
+    .card-title a {
+        color: #333; /* Default text color */
+        text-decoration: none;
+        transition: color 0.3s ease; /* Smooth color transition */
+    }
+
+    .card-title a:hover {
+        color: #007bff; /* Change color on hover */
+    }
+
+    /* Product price */
+    .price {
+        color: #6c757d; /* Darker text color */
+        font-size: 16px; /* Larger font size */
+        font-weight: bold; /* Bold font weight */
+        margin-top: 5px; /* Add some space between name and price */
+    }
+    /* Filter component */
+    #filter-component {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        position: relative;
+        left: 8vw;
+        width: 90vw;
+    }
+    
+    label {
+        margin-right: 10px;
+        font-weight: bold;
+    }
+    
+    /* Material Design Select */
+    .mat-select {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    
+    .mat-select select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 200px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        cursor: pointer;
+    }
+    
+    .mat-select::after {
+        content: '\25BC';
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        pointer-events: none;
+    }
+    
+    .mat-select select:focus {
+        outline: none;
+    }
+    
+    /* Material Design Button */
+    .mat-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    
+    .mat-button:hover {
+        background-color: #0056b3;
+    }
+    
+    /* Product cards */
+    .post-grid .col-lg-4 {
+        margin-bottom: 20px;
+    }
+    
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        overflow: hidden;
+        transition: box-shadow 0.3s ease;
+    }
+    
+    .card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .card-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    .card-body {
+        padding: 15px;
+    }
+    
+    .card-title {
+        margin-bottom: 10px;
+    }
+    
+    .card-meta {
+        font-size: 14px;
+        color: #888;
+    }
+    #filter-btn{
+        border: none;
+        font-size: 12px;
+        position: relative;
+        left: 10px;
+        border-radius: 5px;
+        padding: 6px;
+        width: 57px;
+        height: 27px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    #price-range{
+        border: none;
+        padding: 5px;
+        border-radius: 3px;
+    }
+    </style>
+   <h1>Search Results</h1>
+
+   <section id="latest-blog" class="padding-large">
+       <div id="filter-component">
+           <form action="{% url 'SmartPhones' %}" method="post" style="display: flex;">{% csrf_token %}
+               <label for="price-range">Price Range:</label>
+               <div class="select-wrapper">
+                   <select id="price-range" name="price_range"> <!-- Added name="price_range" -->
+                       <option value="" selected disabled>Select Price Range</option>
+                       <option value="0-50">$0 - $50</option>
+                       <option value="51-100">$51 - $100</option>
+                       <option value="101-200">$101 - $200</option>
+                       <option value="201-500">$201 - $500</option>
+                       <option value="501-1000">$501 - $1000</option>
+                       <option value="1001+">$1001+</option>
+                   </select>
+               </div>
+               <button type="submit" id="filter-btn">Filter</button>
+           </form>
+       </div>
+   
+       <div class="container">
+           <div class="row">
+               <div class="post-grid d-flex flex-wrap justify-content-between">
+                   {% if no_items_found %}
+                   <div class="alert alert-info" role="alert">
+                        <strong>No items found.</strong> Please try adjusting your filter criteria.
+                    </div>
+                   {% else %}
+                       {% for product in smartphones %}
+                           <div class="col-lg-4 col-sm-12">
+                               <a href="{% url 'product_detail' pk=product.pk %}">
+                                   <div class="card border-none me-3">
+                                       <div class="card-image">
+                                           <img src="{{ product.image.url }}" alt="" class="img-fluid">
+                                       </div>
+                                   </div>
+                                   <div class="card-body text-uppercase">
+                                       <div class="card-meta text-muted">
+                                           <span class="meta-category">{{ product.prod_name }}</span>
+                                       </div>
+                                       <h3 class="card-title price">
+                                           Price: $ {{ product.price }}
+                                       </h3>
+                                   </div>
+                               </a>
+                           </div>
+                       {% endfor %}
+                   {% endif %}
+               </div>
+           </div>
+       </div>
+   </section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+   $(document).ready(function() {
+            // Select elements with the class 'price' and log them to the console
+        var prices = $(".price");
+        console.log(prices);
+    });
+    $(document).ready(function() {
+    // Show the available price options in the dropdown input field
+    var priceOptions = ['Select Price Range', '$0 - $50', '$51 - $100', '$101 - $200', '$201 - $500', '$501 - $1000', '$1001+'];
+    $('#price-range').val(priceOptions[0]); // Set default value
+    $('.dropdown-content a').click(function(e) {
+        e.preventDefault(); // Prevent default anchor behavior
+        var selectedOption = $(this).text();
+        $('#price-range').val(selectedOption); // Set the selected option as the input value
+    });
+
+    // Handle filtering when the user clicks the filter button
+    $('#filter-btn').click(function() {
+        var selectedRange = $('#price-range').val();
+        var priceRegex = /\$(\d+)\s*-\s*\$(\d+)/;
+        var match = selectedRange.match(priceRegex);
+        if (match) {
+            var minPrice = parseInt(match[1]);
+            var maxPrice = parseInt(match[2]);
+            filterProducts(minPrice, maxPrice);
+        } else {
+            // Invalid price range, do something (e.g., display an error message)
+        }
+    });
+});
+
+</script>
+{% endblock %}

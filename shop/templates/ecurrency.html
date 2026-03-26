@@ -1,0 +1,94 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<style>
+.input-group-addon {
+    background-color: transparent;
+    border-left: 0;
+}
+
+.cc-number.identified {
+    background-repeat: no-repeat;
+	background-position-y: 3px;
+	background-position-x: 99%;
+}
+
+.one-card > div {
+    height: 150px;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.two-card > div {
+    height: 80px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 48%;
+}
+
+.two-card div.amex-cvc-preview {
+    float: right;
+}
+
+/* Additional Styles */
+.card-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+h2 {
+    margin-top: 5px;
+    font-size: 24px;
+}
+
+.btn {
+    border-radius: 20px; /* Add border radius to buttons */
+}
+</style>
+
+<div class="container py-3" style="padding-top: 30vh;">
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-6" style="padding-top: 30vh;">
+            <div id="pay-invoice" class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h2 class="text-center">Pay Invoice</h2>
+                    </div>
+                    {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>  <!-- Display error message -->
+                    {% endif %}
+                    <hr>
+                    <form action="" method="post" novalidate="novalidate">{% csrf_token %}
+                        <input type="text" value="{{eCurrency}}" hidden name="eCurrency" id="">
+                        <input type="text" value="{{amount}}" hidden name="amount" id="">
+                        <div class="form-group">
+                            <label>Payment in wallet</label>
+                            <h2>${{eCurrency}}</h2>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment amount</label>
+                            <h2>$100.00</h2>
+                        </div>
+
+                        <div>
+                            <button id="payment-button" type="submit" class="btn btn-lg btn-success btn-block">
+                                <i class="fa fa-lock fa-lg"></i>&nbsp;
+                                <span id="payment-button-amount">Pay ${{total_amount}}</span>
+                                <span id="payment-button-sending" style="display:none;">Sending…</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

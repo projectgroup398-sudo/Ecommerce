@@ -1,0 +1,65 @@
+{% extends 'index.html' %}
+        {% block content %}
+
+        <a href=""><i  style="color: rgb(0, 0, 0); position: relative; left: 2vw ;top: 10px ; cursor: pointer; ;font-size: 2rem ;border: 1px solid rgb(255, 255, 255);" class="fa-solid fa-arrow-left"></i> <!-- Section--></a>
+        <section class="py-5">
+              <div class="container px-4 px-lg-5 my-5">
+                  <div class="row gx-4 gx-lg-5 align-items-center">
+                      <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{ product_data.image.url }}" alt="..." /></div>
+                      <div class="col-md-6">
+                          <h1 class="display-5 fw-bolder">{{product_data.prod_name}}</h1>
+                          <div class="fs-5 mb-5">
+                            {% if product_data.discount_percent > 0 %}
+                                <del>£{{ product_data.discount_percent }}</del> <!-- Strikethrough original price -->
+                                <p class="text-danger">£{{ product_data.price }}</p> <!-- Display discounted price -->
+                            {% else %}
+                                <span>£{{ product_data.price }}</span> <!-- Display original price -->
+                            {% endif %}
+                          </div>
+                          <p class="lead">{{product_data.prod_desc}}</p>
+                          <div class="d-flex">
+                            <form  id="post-form" style="display: flex;" method="post">{% csrf_token %}
+                                <input type="text" id = "product_image" name="product_image" value="{{ product_data.image.url}}" hidden>
+                                <input type="text" id = "price" name="price" value="{{ product_data.price}}" hidden>
+                              <input type="hidden" name="username" id="username" value="{{ user.id }}"/>
+                              <input type="hidden" name="product_name" id="product_name" value="{{product_data.prod_name}}"/>
+                              <input class="form-control text-center me-3" id="inputQuantity" type="num" name="num" value="1" style="max-width: 3rem" />
+                              <button class="btn btn-outline-dark flex-shrink-0" type="submit">
+                                <i class="bi-cart-fill me-1"></i>
+                                Add to cart
+                              </button>
+                            </form>
+                          </div>
+                          <div id="error-container"></div>
+                        </div>
+                  </div>
+              </div>
+          </section>
+          <section class="py-5 bg-light">
+              <div class="container px-4 px-lg-5 mt-5">
+                  <h2 class="fw-bolder mb-4">Related products</h2>
+                  <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                      {% for related_product in related_products %}
+                          <div class="col mb-5">
+                              <div class="card h-100">
+                                  <img class="card-img-top" src="{{ related_product.image.url }}" alt="{{ related_product.prod_name }} Image" />
+                                  <div class="card-body p-4">
+                                      <div class="text-center">
+                                          <h5 class="fw-bolder">{{ related_product.prod_name }}</h5>
+                                          <p class="text-muted">$ {{ related_product.price }}</p>
+                                      </div>
+                                  </div>
+                                  <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                      <div class="text-center">
+                                          <a class="btn btn-outline-dark mt-auto" href="{% url 'product_detail' pk=related_product.pk %}">View details</a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      {% endfor %}
+                  </div>
+              </div>
+          </section>
+        
+        {% endblock %}
+     

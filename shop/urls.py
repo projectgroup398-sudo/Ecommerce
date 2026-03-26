@@ -1,0 +1,25 @@
+from django.urls import path
+from . import views
+urlpatterns = [
+    path('', views.home.as_view() , name="home"),
+    path('product_detail/<int:pk>', views.product_detail.as_view(),name="product_detail"),
+    path('send', views.send , name="send"),
+    path('login', views.login_view , name="login"),
+    path('logout', views.logout.as_view() , name="logout"),
+    path('cart_list', views.cart_list , name="cart_list"),
+    path('get_data', views.get_data, name='get_data'),
+    path('history', views.history.as_view(), name='history'),
+    path('checkout', views.checkout.as_view(), name='checkout'), 
+    path('signup', views.signup, name='signup'),
+    path('checkoutview', views.checkoutview, name='checkoutview'),
+    path('ecurrency', views.ecurrency, name='ecurrency'),
+    path('payment', views.payment, name='payment'),
+    path('delete_add_item', views.delete_add_item, name='delete_add_item'),
+    path('search', views.search_view, name='search'),
+    path('SmartPhones', views.SmartPhones, name='SmartPhones'),
+    path('Watches', views.Watches.as_view(), name='Watches'),
+    path('success', views.success, name='success'),
+    path('monitors', views.monitors.as_view(), name='monitors'),
+    path('Speakers', views.Speakers.as_view(), name='Speakers'),
+    path('MemoryCards', views.MemoryCards.as_view(), name='MemoryCards'),
+]

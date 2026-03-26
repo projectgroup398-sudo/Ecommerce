@@ -1,0 +1,39 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div class="container py-3">
+    <div class="row justify-content-center">
+        <div class="col-md-8" style="margin-top: 9vw;">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h3 class="mb-0">Payment Receipt</h3>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Order ID:</strong> {{ latest_order.order_id }}</p>
+                            <p><strong>Product Name:</strong> {{ latest_order.product.prod_name }}</p>
+                            <p><strong>Quantity:</strong> {{ latest_order.quantity }}</p>
+                            <p><strong>Price:</strong> ${{ latest_order.price }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <!-- Add more details as needed -->
+                            <!-- Payment details, customer information, etc. -->
+                        </div>
+                    </div>
+
+                    <!-- Download Button/Link -->
+                    <div class="mt-3">
+                    </div>
+                </div>
+
+                <div class="card-footer text-muted">
+                    <!-- Provide a link back to the home page or any other relevant page -->
+                    <a href="{% url 'home' %}" class="btn btn-secondary">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

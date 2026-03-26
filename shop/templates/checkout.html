@@ -1,0 +1,221 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<section class="bg-light py-5">
+    <div class="container">
+      <div class="row">
+          <div class="col-xl-8 col-lg-8 mb-4">
+          <!-- Checkout -->
+          <form method="post" id="user_address">{% csrf_token %}
+
+            <div class="card shadow-0 border">
+                <div class="p-4">
+                    <h5 class="card-title1 mb-3">Guest checkout</h5>
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <p class="mb-0">First name</p>
+                            <div class="form-outline">
+                                <input type="text" id="id_firstname" name="firstname" placeholder="Type here" class="form-control" required />
+                            </div>
+                        </div>
+        
+                        <div class="col-6">
+                            <p class="mb-0">Last name</p>
+                            <div class="form-outline">
+                                <input type="text" id="id_lastname" name="lastname" placeholder="Type here" class="form-control" required />
+                            </div>
+                        </div>
+        
+                        <div class="col-6 mb-3">
+                            <p class="mb-0">Phone</p>
+                            <div class="form-outline">
+                                <input type="tel" id="id_phone" name="phone" class="form-control"  required/>
+                            </div>
+                        </div>
+        
+                        <div class="col-6 mb-3">
+                            <p class="mb-0">Email</p>
+                            <div class="form-outline">
+                                <input type="email" id="id_email" name="email" placeholder="example@gmail.com" class="form-control" required />
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"  />
+                        <label class="form-check-label" for="flexCheckDefault">Keep me up to date on news</label>
+                    </div>
+        
+                    <hr class="my-4" />
+        
+                    <h5 class="card-title1 mb-2">Shipping info</h5>
+        
+                    <div class="row mb-3">
+                        <!-- Your radio button code remains unchanged -->
+                    </div>
+        
+                    <div class="row">
+                        <div class="col-sm-8 mb-3">
+                            <p class="mb-0">Address</p>
+                            <div class="form-outline">
+                                <input type="text" id="id_address" name="address" placeholder="Type here" class="form-control" required />
+                            </div>
+                        </div>
+        
+                        <div class="col-sm-4 mb-3">
+                            <p class="mb-0">City</p>
+                            <select id="id_city" name="city" class="form-select">
+                                <option value="1">London</option>
+                                <option value="2">Slough</option>
+                                <option value="3">Canning Town</option>
+                            </select>
+                        </div>
+        
+                        <div class="col-sm-4 mb-3">
+                            <p class="mb-0">House</p>
+                            <div class="form-outline">
+                                <input type="text" id="id_house" name="house" placeholder="Type here" class="form-control" required />
+                            </div>
+                        </div>
+        
+                        <div class="col-sm-4 col-6 mb-3">
+                            <p class="mb-0">Postal code</p>
+                            <div class="form-outline">
+                                <input type="text" id="id_postalcode" name="postalcode" class="form-control" required />
+                            </div>
+                        </div>
+        
+                        <div class="col-sm-4 col-6 mb-3">
+                            <p class="mb-0">Zip</p>
+                            <div class="form-outline">
+                                <input type="text" id="id_zip" name="zip" class="form-control" required/>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1" />
+                        <label class="form-check-label" for="flexCheckDefault1">Save this address</label>
+                    </div>
+        
+                    <div class="mb-3">
+                        <p class="mb-0">Message to seller</p>
+                        <div class="form-outline">
+                            <textarea id="id_message_to_seller" name="message_to_seller" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+        
+                    <div class="float-end">
+                        <button class="btn btn-light border">Cancel</button>
+                        <a href="{% url 'checkoutview' %}"><button class="btn btn-success shadow-0 border">Continue</button></a>
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+            <!-- Checkout -->
+          </div>
+        <div class="col-xl-4 col-lg-4 d-flex justify-content-center justify-content-lg-end">
+          <div class="ms-lg-4 mt-4 mt-lg-0" style="max-width: 320px;">
+            <h6 class="mb-3">Summary</h6>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Total price:</p>
+              <p class="mb-2">{{totalPrice}}</p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Discount:</p>
+              <p class="mb-2 text-danger">- $0.00</p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Shipping cost:</p>
+              <p class="mb-2">+ $20.00</p>
+            </div>
+            {% if request.user.is_authenticated %}
+                <div class="d-flex justify-content-between">
+                    <p class="mb-2">E-currency in wallet:</p>
+                    <p class="mb-2">{{ request.user.ecurrency.amount }}</p>
+                </div>
+            {% endif %}
+            <hr />
+            <div class="d-flex justify-content-between">
+              <p class="mb-2">Total price:</p>
+              <p class="mb-2 fw-bold"  id="totalPrice">$ {{ totalPrice|add:20 }}</p>
+            </div>
+  
+            <div class="input-group mt-3 mb-4">
+              <input type="text" class="form-control border" name="" placeholder="Promo code" />
+              <button id="applyOfferBtn" class="btn btn-primary">Apply Offer</button>
+            </div>
+            <div class="alert alert-info" role="alert">
+                Use promo code <strong>firstoffer</strong> to get 20% discount!
+            </div>
+            <hr />
+            <h6 class="text-dark my-4">Items in cart</h6>
+  
+            {% for item in data %}
+            <div class="d-flex align-items-center mb-4">
+                <div class="me-3 position-relative">
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-secondary">
+                        {{ item.quantity }}
+                    </span>
+                    <img src="{{ item.image }}" style="height: 96px; width: 96px;" class="img-sm rounded border" />
+                </div>
+                <div class="">
+                    <a href="#" class="nav-link">
+                        {{ item.product_name }} <br />
+                    </a>
+                    <div class="price text-muted">Total: ${{ item.total|floatformat:2 }}</div>
+                </div>
+            </div>
+        {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listener for the Apply Offer button
+        document.getElementById('applyOfferBtn').addEventListener('click', function() {
+            // Get the entered promo code
+            var promoCode = prompt("Enter promo code:");
+    
+            // Check if the promo code is "firstoffer"
+            if (promoCode === "firstoffer") {
+                // Get the current total price
+                var totalPriceElement = document.getElementById('totalPrice');
+                var totalPrice = parseFloat(totalPriceElement.textContent.replace('$', ''));
+    
+                // Check if the offer has already been applied
+                var offerApplied = totalPriceElement.dataset.offerApplied === 'true';
+    
+                if (offerApplied) {
+                    // Restore the original price (remove the offer)
+                    var originalPrice = totalPrice / 0.8; // Restore to the original price
+                    totalPriceElement.textContent = '$' + originalPrice.toFixed(2);
+                    totalPriceElement.dataset.offerApplied = 'false';
+                    // Change button text back to "Apply Offer" and remove 'btn-danger' class
+                    this.textContent = 'Apply Offer';
+                    this.classList.remove('btn-danger');
+                    this.classList.add('btn-primary');
+                } else {
+                    // Apply the offer (reduce the price by 20%)
+                    var discountedPrice = totalPrice * 0.8; // 20% discount
+                    totalPriceElement.textContent = '$' + discountedPrice.toFixed(2);
+                    totalPriceElement.dataset.offerApplied = 'true';
+                    // Change button text to "Remove Offer" and change 'btn-primary' class to 'btn-danger'
+                    this.textContent = 'Remove Offer';
+                    this.classList.remove('btn-primary');
+                    this.classList.add('btn-danger');
+                }
+            } else {
+                // Show an alert for invalid promo code
+                alert("Invalid promo code!");
+            }
+        });
+    });
+    </script>
+    
+    
+  <!-- Footer -->
+{% endblock %}
